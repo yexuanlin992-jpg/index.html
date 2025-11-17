@@ -2,178 +2,639 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Game Balapan Fisika Sederhana</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planet Tata Surya - Interaktif</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { margin: 0; overflow: hidden; background-color: #222; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; }
-        canvas { border: 2px solid #fff; background-color: #444; }
-        #info { position: absolute; top: 10px; left: 10px; color: white; background: rgba(0, 0, 0, 0.5); padding: 10px; border-radius: 5px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0b0b2d, #1a1a4a);
+            color: #fff;
+            padding: 20px;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 242, 254, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a0a0e0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .filter-btn:hover {
+            background: rgba(79, 172, 254, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .filter-btn.active {
+            background: rgba(79, 172, 254, 0.5);
+            box-shadow: 0 0 15px rgba(79, 172, 254, 0.5);
+        }
+        
+        .search-box {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .search-box input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .search-box input::placeholder {
+            color: #a0a0e0;
+        }
+        
+        .search-box input:focus {
+            box-shadow: 0 0 15px rgba(79, 172, 254, 0.5);
+        }
+        
+        .planets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .planet-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .planet-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #4facfe, #00f2fe);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .planet-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .planet-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .planet-shape {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s ease;
+        }
+        
+        .planet-card:hover .planet-shape {
+            transform: rotate(15deg) scale(1.1);
+        }
+        
+        .planet-name {
+            font-size: 1.5rem;
+            margin: 10px 0;
+            color: #fff;
+        }
+        
+        .planet-desc {
+            font-size: 0.9rem;
+            color: #c0c0f0;
+            margin-bottom: 10px;
+        }
+        
+        .planet-details {
+            text-align: left;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #a0a0e0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        .planet-card.active .planet-details {
+            max-height: 200px;
+        }
+        
+        .planet-details p {
+            margin: 5px 0;
+        }
+        
+        .planet-facts {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            font-size: 0.8rem;
+            color: #c0c0f0;
+            display: none;
+        }
+        
+        .planet-card.active .planet-facts {
+            display: block;
+        }
+        
+        .comparison-section {
+            margin: 40px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+        }
+        
+        .comparison-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: #4facfe;
+        }
+        
+        .comparison-chart {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 200px;
+            margin-top: 20px;
+        }
+        
+        .comparison-bar {
+            width: 40px;
+            background: linear-gradient(to top, #4facfe, #00f2fe);
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            transition: height 1s ease;
+        }
+        
+        .comparison-bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #a0a0e0;
+            white-space: nowrap;
+        }
+        
+        .comparison-bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #fff;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #a0a0e0;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a4a, #0b0b2d);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 30px rgba(79, 172, 254, 0.5);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            color: #fff;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: #4facfe;
+        }
+        
+        .modal-planet-name {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #4facfe;
+            text-align: center;
+        }
+        
+        .modal-planet-image {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(79, 172, 254, 0.5);
+        }
+        
+        .modal-planet-details {
+            margin-top: 20px;
+        }
+        
+        .modal-planet-details p {
+            margin: 10px 0;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .planets-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .filter-btn {
+                width: 200px;
+                justify-content: center;
+            }
+        }
+        
+        .planet-stats {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 15px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4facfe;
+        }
+        
+        .stat-label {
+            font-size: 0.7rem;
+            color: #a0a0e0;
+        }
+        
+        .toggle-details {
+            background: none;
+            border: none;
+            color: #4facfe;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .favorite-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #a0a0e0;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            z-index: 10;
+        }
+        
+        .favorite-btn:hover {
+            transform: scale(1.2);
+        }
+        
+        .favorite-btn.active {
+            color: #ffd700;
+        }
+        
+        .favorites-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            display: none;
+        }
+        
+        .favorites-section.active {
+            display: block;
+        }
+        
+        .favorites-title {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+        
+        .favorites-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .favorite-item {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: rgba(255, 215, 0, 0.9);
+            color: #1a1a4a;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateX(150%);
+            transition: transform 0.5s ease;
+            z-index: 1001;
+            font-weight: bold;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
     </style>
 </head>
 <body>
-
-    <canvas id="raceCanvas" width="800" height="600"></canvas>
-
-    <div id="info">
-        <h3>Kontrol:</h3>
-        <p>⬆️: Akselerasi</p>
-        <p>⬇️: Rem/Mundur</p>
-        <p>⬅️/➡️: Belok</p>
-        <p>Kecepatan: <span id="speedDisplay">0.00</span></p>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-globe-americas"></i> Planet-Planet Tata Surya</h1>
+            <p class="subtitle">Jelajahi informasi menarik tentang planet-planet dalam sistem tata surya kita dengan fitur interaktif yang menarik.</p>
+            
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Cari planet...">
+            </div>
+            
+            <div class="controls">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-globe"></i> Semua Planet
+                </button>
+                <button class="filter-btn" data-filter="rocky">
+                    <i class="fas fa-mountain"></i> Planet Batuan
+                </button>
+                <button class="filter-btn" data-filter="gas">
+                    <i class="fas fa-wind"></i> Planet Gas
+                </button>
+                <button class="filter-btn" data-filter="ice">
+                    <i class="fas fa-snowflake"></i> Planet Es
+                </button>
+                <button class="filter-btn" id="showFavorites">
+                    <i class="fas fa-star"></i> Favorit Saya
+                </button>
+            </div>
+        </header>
+        
+        <div class="favorites-section" id="favoritesSection">
+            <h3 class="favorites-title"><i class="fas fa-star"></i> Planet Favorit Anda</h3>
+            <div class="favorites-list" id="favoritesList">
+                <!-- Daftar favorit akan ditampilkan di sini -->
+            </div>
+        </div>
+        
+        <div class="planets-grid" id="planetsGrid">
+            <!-- Planet cards akan diisi oleh JavaScript -->
+        </div>
+        
+        <div class="comparison-section">
+            <h3 class="comparison-title"><i class="fas fa-chart-bar"></i> Perbandingan Ukuran Planet (dalam ribuan km)</h3>
+            <div class="comparison-chart" id="comparisonChart">
+                <!-- Chart akan diisi oleh JavaScript -->
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Informasi Planet Tata Surya Interaktif &copy; 2023 - Semua data berdasarkan pengetahuan astronomi terkini</p>
+        </div>
+    </div>
+    
+    <!-- Modal untuk detail planet -->
+    <div class="modal" id="planetModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h2 class="modal-planet-name" id="modalPlanetName">Nama Planet</h2>
+            <div class="modal-planet-image" id="modalPlanetImage"></div>
+            <div class="modal-planet-details" id="modalPlanetDetails">
+                <!-- Detail planet akan diisi oleh JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notifikasi -->
+    <div class="notification" id="notification">
+        Planet telah ditambahkan ke favorit!
     </div>
 
     <script>
-        // Mendapatkan elemen Canvas
-        const canvas = document.getElementById('raceCanvas');
-        const ctx = canvas.getContext('2d');
-        const speedDisplay = document.getElementById('speedDisplay');
-
-        // --- Variabel Game dan Fisika ---
-        const car = {
-            x: 100,
-            y: 100,
-            width: 20,
-            height: 40,
-            angle: 0,
-            speed: 0,
-            maxSpeed: 5,
-            acceleration: 0.1,
-            friction: 0.05,
-            turnSpeed: 0.03
-        };
-
-        const keys = {
-            up: false,
-            down: false,
-            left: false,
-            right: false
-        };
-
-        // --- Fungsi untuk Menggambar Mobil ---
-        function drawCar() {
-            ctx.save();
-            // Pindahkan dan putar konteks gambar ke posisi mobil
-            ctx.translate(car.x, car.y);
-            ctx.rotate(car.angle);
-
-            // Badan Mobil
-            ctx.fillStyle = 'red';
-            ctx.fillRect(-car.width / 2, -car.height / 2, car.width, car.height);
-            
-            // Atap Mobil (ilustrasi)
-            ctx.fillStyle = 'black';
-            ctx.fillRect(-car.width / 3, -car.height / 4, car.width / 1.5, car.height / 4);
-
-            ctx.restore();
-        }
-
-        // --- Fungsi untuk Menggambar Trek (Jalur Sederhana) ---
-        function drawTrack() {
-            ctx.strokeStyle = 'white';
-            ctx.lineWidth = 50;
-            ctx.lineCap = 'round';
-            ctx.beginPath();
-            
-            // Contoh jalur sederhana (kotak dengan sudut melengkung)
-            ctx.moveTo(100, 100);
-            ctx.lineTo(canvas.width - 100, 100);
-            ctx.lineTo(canvas.width - 100, canvas.height - 100);
-            ctx.lineTo(100, canvas.height - 100);
-            ctx.closePath();
-            ctx.stroke();
-
-            // Garis Start/Finish
-            ctx.strokeStyle = 'yellow';
-            ctx.lineWidth = 5;
-            ctx.beginPath();
-            ctx.moveTo(100, 75);
-            ctx.lineTo(100, 125);
-            ctx.stroke();
-        }
-
-        // --- Fungsi Pembaruan Fisika Mobil ---
-        function updateCar() {
-            // 1. Input dan Akselerasi
-            if (keys.up) {
-                car.speed += car.acceleration;
-            }
-            if (keys.down) {
-                // Rem lebih kuat saat speed positif
-                if (car.speed > 0) {
-                    car.speed -= car.acceleration * 1.5;
-                } else {
-                    // Mundur
-                    car.speed -= car.acceleration / 2;
-                }
-            }
-
-            // Batasi Kecepatan Maksimal
-            car.speed = Math.max(-car.maxSpeed / 2, Math.min(car.maxSpeed, car.speed));
-
-            // 2. Gesekan (Friction)
-            if (!keys.up && !keys.down) {
-                // Kurangi kecepatan perlahan jika tidak ada input
-                if (car.speed > 0) {
-                    car.speed -= car.friction;
-                    car.speed = Math.max(0, car.speed); // Pastikan tidak negatif
-                } else if (car.speed < 0) {
-                    car.speed += car.friction;
-                    car.speed = Math.min(0, car.speed); // Pastikan tidak positif
-                }
-            }
-
-            // 3. Belok (Hanya saat bergerak)
-            if (Math.abs(car.speed) > 0.1) {
-                if (keys.left) {
-                    car.angle -= car.turnSpeed * Math.sign(car.speed);
-                }
-                if (keys.right) {
-                    car.angle += car.turnSpeed * Math.sign(car.speed);
-                }
-            }
-
-            // 4. Update Posisi
-            car.x += Math.sin(car.angle) * car.speed;
-            car.y -= Math.cos(car.angle) * car.speed;
-        }
-
-        // --- Fungsi Utama Loop Game ---
-        function gameLoop() {
-            // 1. Bersihkan Canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // 2. Gambar Trek
-            drawTrack();
-
-            // 3. Perbarui Fisika Mobil
-            updateCar();
-
-            // 4. Gambar Mobil
-            drawCar();
-
-            // 5. Update Info Display
-            speedDisplay.textContent = car.speed.toFixed(2);
-
-            // Lanjutkan Loop
-            requestAnimationFrame(gameLoop);
-        }
-
-        // --- Event Listener untuk Input Keyboard ---
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowUp') keys.up = true;
-            if (e.key === 'ArrowDown') keys.down = true;
-            if (e.key === 'ArrowLeft') keys.left = true;
-            if (e.key === 'ArrowRight') keys.right = true;
-        });
-
-        document.addEventListener('keyup', (e) => {
-            if (e.key === 'ArrowUp') keys.up = false;
-            if (e.key === 'ArrowDown') keys.down = false;
-            if (e.key === 'ArrowLeft') keys.left = false;
-            if (e.key === 'ArrowRight') keys.right = false;
-        });
-
-        // Mulai Game
-        gameLoop();
-    </script>
-</body>
-</html>
+        // Data planet
+        const planets = [
+            {
+                id: 1,
+                name: "Merkurius",
+                type: "rocky",
+                description: "Planet terkecil dan terdekat dengan Matahari",
+                diameter: 4879,
+                mass: "3,3 × 10²³",
+                distance: "57,9 juta km",
+                color: "linear-gradient(135deg, #8c8c8c, #5a5a5a)",
+                facts: "Merkurius tidak memiliki satelit alami dan atmosfer yang signifikan. Satu hari di Merkurius (dari matahari terbit hingga terbit berikutnya) memakan waktu sekitar 176 hari Bumi.",
+                orbitalPeriod: "88 hari",
+                rotationPeriod: "59 hari",
+                temperature: "-173°C hingga 427°C"
+            },
+            {
+                id: 2,
+                name: "Venus",
+                type: "rocky",
+                description: "Planet terpanas dengan atmosfer tebal",
+                diameter: 12104,
+                mass: "4,87 × 10²⁴",
+                distance: "108,2 juta km",
+                color: "linear-gradient(135deg, #e6b87e, #b5651d)",
+                facts: "Venus berotasi dari timur ke barat, berlawanan dengan sebagian besar planet. Atmosfernya yang tebal terdiri terutama dari karbon dioksida, menciptakan efek rumah kaca yang ekstrem.",
+                orbitalPeriod: "225 hari",
+                rotationPeriod: "243 hari",
+                temperature: "462°C"
+            },
+            {
+                id: 3,
+                name: "Bumi",
+                type: "rocky",
+                description: "Planet biru dengan kehidupan",
+                diameter: 12742,
+                mass: "5,97 × 10²⁴",
+                distance: "149,6 juta km",
+                color: "linear-gradient(135deg, #6b93d6, #2e5aa7)",
+                facts: "Bumi adalah satu-satunya planet yang diketahui memiliki kehidupan. 71% permukaannya ditutupi air, dan memiliki satu satelit alami, Bulan.",
+                orbitalPeriod: "365,25 hari",
+                rotationPeriod: "24 jam",
+                temperature: "-88°C hingga 58°C"
+            },
+            {
+                id: 4,
+                name: "Mars",
+                type: "rocky",
+                description: "Planet merah dengan gunung tertinggi",
+                diameter: 6779,
+                mass: "6,42 × 10²³",
+                distance: "227,9 juta km",
+                color: "linear-gradient(135deg, #c1440e, #8b2c0c)",
+                facts: "Mars memiliki gunung tertinggi di tata surya, Olympus Mons, dengan tinggi sekitar 21 km. Planet ini juga memiliki dua satelit alami, Phobos dan Deimos.",
+                orbitalPeriod: "687 hari",
+                rotationPeriod: "24,6 jam",
+                temperature: "-87°C hingga -5°C"
+            },
+            {
+                id: 5,
+                name: "Jupiter",
+                type: "gas",
+                description: "Planet terbesar dengan Bintik Merah Besar",
+                diameter: 139820,
+                mass: "1,90 × 10²⁷",
+                distance: "778,5 juta km",
+                color: "linear-gradient(135deg, #d8ca9d, #a8996e)",
+                facts: "Jupiter adalah planet terbesar di tata surya kita. Bintik Merah Besarnya adalah badai raksasa yang telah berlangsung setidaknya 400 tahun. Jupiter memiliki 79 satelit yang diketahui.",
+                orbitalPeriod: "12 tahun",
+                rotationPeriod: "9,9 jam",
+                temperature: "-108°C"
+            },
+            {
+                id: 6,
+                name: "Saturnus",
+                type: "gas",
+                description: "Planet dengan cincin yang menakjubkan",
+                diameter: 116460,
+                mass: "5,68 × 10²⁶",
+                distance: "1,43 miliar km",
+                color: "linear-gradient(135deg, #e4d19a, #b8a46d)",
+                facts: "Cincin Saturnus sebagian besar terbuat dari potongan es dan batu. Planet ini adalah yang paling tidak padat di tata surya - akan mengapung jika ditempatkan di air yang cukup besar.",
+                orbitalPeriod: "29 tahun",
+                rotationPeriod: "10,7 jam",
+                temperature: "-138°C"
+            },
+            {
+                id: 7,
+                name: "Uranus",
+                type: "ice",
+                description: "Planet es dengan sumbu rotasi miring",
+                diameter: 50724,
+                mass: "8,68 × 10²⁵",
+                distance: "2,87 miliar km",
+                color: "linear-gradient(135deg, #a6d
