@@ -330,6 +330,8 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 30px rgba(79, 172, 254, 0.5);
+            background-size: cover;
+            background-position: center;
         }
         
         .modal-planet-details {
@@ -471,6 +473,22 @@
         .notification.show {
             transform: translateX(0);
         }
+
+        /* Tambahan styling untuk ikon planet */
+        .planet-icon {
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.9);
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+        }
+
+        .planet-texture {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            opacity: 0.7;
+            mix-blend-mode: overlay;
+        }
     </style>
 </head>
 <body>
@@ -543,7 +561,7 @@
     </div>
 
     <script>
-        // Data planet
+        // Data planet yang lengkap dengan gambar dan ikon
         const planets = [
             {
                 id: 1,
@@ -551,13 +569,17 @@
                 type: "rocky",
                 description: "Planet terkecil dan terdekat dengan Matahari",
                 diameter: 4879,
-                mass: "3,3 × 10²³",
+                mass: "3,3 × 10²³ kg",
                 distance: "57,9 juta km",
                 color: "linear-gradient(135deg, #8c8c8c, #5a5a5a)",
+                icon: "fas fa-fire",
+                texture: "radial-gradient(circle at 30% 30%, #a8a8a8, #696969 70%)",
                 facts: "Merkurius tidak memiliki satelit alami dan atmosfer yang signifikan. Satu hari di Merkurius (dari matahari terbit hingga terbit berikutnya) memakan waktu sekitar 176 hari Bumi.",
                 orbitalPeriod: "88 hari",
                 rotationPeriod: "59 hari",
-                temperature: "-173°C hingga 427°C"
+                temperature: "-173°C hingga 427°C",
+                moons: 0,
+                discovery: "Dikenal sejak zaman kuno"
             },
             {
                 id: 2,
@@ -565,13 +587,17 @@
                 type: "rocky",
                 description: "Planet terpanas dengan atmosfer tebal",
                 diameter: 12104,
-                mass: "4,87 × 10²⁴",
+                mass: "4,87 × 10²⁴ kg",
                 distance: "108,2 juta km",
                 color: "linear-gradient(135deg, #e6b87e, #b5651d)",
+                icon: "fas fa-cloud",
+                texture: "radial-gradient(circle at 40% 40%, #f0c090, #d2691e 70%)",
                 facts: "Venus berotasi dari timur ke barat, berlawanan dengan sebagian besar planet. Atmosfernya yang tebal terdiri terutama dari karbon dioksida, menciptakan efek rumah kaca yang ekstrem.",
                 orbitalPeriod: "225 hari",
                 rotationPeriod: "243 hari",
-                temperature: "462°C"
+                temperature: "462°C",
+                moons: 0,
+                discovery: "Dikenal sejak zaman kuno"
             },
             {
                 id: 3,
@@ -579,13 +605,17 @@
                 type: "rocky",
                 description: "Planet biru dengan kehidupan",
                 diameter: 12742,
-                mass: "5,97 × 10²⁴",
+                mass: "5,97 × 10²⁴ kg",
                 distance: "149,6 juta km",
                 color: "linear-gradient(135deg, #6b93d6, #2e5aa7)",
+                icon: "fas fa-globe-americas",
+                texture: "radial-gradient(circle at 30% 30%, #87ceeb, #2e5aa7 60%, #228b22 80%)",
                 facts: "Bumi adalah satu-satunya planet yang diketahui memiliki kehidupan. 71% permukaannya ditutupi air, dan memiliki satu satelit alami, Bulan.",
                 orbitalPeriod: "365,25 hari",
                 rotationPeriod: "24 jam",
-                temperature: "-88°C hingga 58°C"
+                temperature: "-88°C hingga 58°C",
+                moons: 1,
+                discovery: "-"
             },
             {
                 id: 4,
@@ -593,13 +623,17 @@
                 type: "rocky",
                 description: "Planet merah dengan gunung tertinggi",
                 diameter: 6779,
-                mass: "6,42 × 10²³",
+                mass: "6,42 × 10²³ kg",
                 distance: "227,9 juta km",
                 color: "linear-gradient(135deg, #c1440e, #8b2c0c)",
+                icon: "fas fa-mountain",
+                texture: "radial-gradient(circle at 40% 40%, #ff4500, #8b0000 70%)",
                 facts: "Mars memiliki gunung tertinggi di tata surya, Olympus Mons, dengan tinggi sekitar 21 km. Planet ini juga memiliki dua satelit alami, Phobos dan Deimos.",
                 orbitalPeriod: "687 hari",
                 rotationPeriod: "24,6 jam",
-                temperature: "-87°C hingga -5°C"
+                temperature: "-87°C hingga -5°C",
+                moons: 2,
+                discovery: "Dikenal sejak zaman kuno"
             },
             {
                 id: 5,
@@ -607,13 +641,17 @@
                 type: "gas",
                 description: "Planet terbesar dengan Bintik Merah Besar",
                 diameter: 139820,
-                mass: "1,90 × 10²⁷",
+                mass: "1,90 × 10²⁷ kg",
                 distance: "778,5 juta km",
                 color: "linear-gradient(135deg, #d8ca9d, #a8996e)",
+                icon: "fas fa-circle",
+                texture: "radial-gradient(circle at 30% 30%, #f0e68c, #daa520 50%, #8b4513 80%)",
                 facts: "Jupiter adalah planet terbesar di tata surya kita. Bintik Merah Besarnya adalah badai raksasa yang telah berlangsung setidaknya 400 tahun. Jupiter memiliki 79 satelit yang diketahui.",
                 orbitalPeriod: "12 tahun",
                 rotationPeriod: "9,9 jam",
-                temperature: "-108°C"
+                temperature: "-108°C",
+                moons: 79,
+                discovery: "Dikenal sejak zaman kuno"
             },
             {
                 id: 6,
@@ -621,13 +659,17 @@
                 type: "gas",
                 description: "Planet dengan cincin yang menakjubkan",
                 diameter: 116460,
-                mass: "5,68 × 10²⁶",
+                mass: "5,68 × 10²⁶ kg",
                 distance: "1,43 miliar km",
                 color: "linear-gradient(135deg, #e4d19a, #b8a46d)",
+                icon: "fas fa-ring",
+                texture: "radial-gradient(circle at 40% 40%, #f0e68c, #daa520 60%)",
                 facts: "Cincin Saturnus sebagian besar terbuat dari potongan es dan batu. Planet ini adalah yang paling tidak padat di tata surya - akan mengapung jika ditempatkan di air yang cukup besar.",
                 orbitalPeriod: "29 tahun",
                 rotationPeriod: "10,7 jam",
-                temperature: "-138°C"
+                temperature: "-138°C",
+                moons: 82,
+                discovery: "Dikenal sejak zaman kuno"
             },
             {
                 id: 7,
@@ -635,6 +677,306 @@
                 type: "ice",
                 description: "Planet es dengan sumbu rotasi miring",
                 diameter: 50724,
-                mass: "8,68 × 10²⁵",
+                mass: "8,68 × 10²⁵ kg",
                 distance: "2,87 miliar km",
-                color: "linear-gradient(135deg, #a6d
+                color: "linear-gradient(135deg, #a6d1e6, #7db9d9)",
+                icon: "fas fa-snowflake",
+                texture: "radial-gradient(circle at 30% 30%, #e0ffff, #87ceeb 60%, #4682b4 80%)",
+                facts: "Uranus memiliki sumbu rotasi yang sangat miring, sehingga tampak 'berbaring' saat mengorbit Matahari. Planet ini ditemukan pada tahun 1781 oleh William Herschel.",
+                orbitalPeriod: "84 tahun",
+                rotationPeriod: "17,2 jam",
+                temperature: "-195°C",
+                moons: 27,
+                discovery: "1781 oleh William Herschel"
+            },
+            {
+                id: 8,
+                name: "Neptunus",
+                type: "ice",
+                description: "Planet biru dengan angin terkuat",
+                diameter: 49244,
+                mass: "1,02 × 10²⁶ kg",
+                distance: "4,5 miliar km",
+                color: "linear-gradient(135deg, #5b6dcd, #3a4ca8)",
+                icon: "fas fa-wind",
+                texture: "radial-gradient(circle at 40% 40%, #4169e1, #000080 70%)",
+                facts: "Neptunus memiliki angin terkuat di tata surya, dengan kecepatan mencapai 2.100 km/jam. Planet ini ditemukan melalui perhitungan matematika sebelum diamati secara langsung.",
+                orbitalPeriod: "165 tahun",
+                rotationPeriod: "16,1 jam",
+                temperature: "-201°C",
+                moons: 14,
+                discovery: "1846 oleh Johann Galle"
+            }
+        ];
+
+        // Variabel global
+        let favorites = JSON.parse(localStorage.getItem('planetFavorites')) || [];
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        // Inisialisasi halaman
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPlanets();
+            setupEventListeners();
+            renderComparisonChart();
+            updateFavoritesSection();
+        });
+
+        // Render daftar planet
+        function renderPlanets() {
+            const planetsGrid = document.getElementById('planetsGrid');
+            
+            // Filter planet berdasarkan jenis dan pencarian
+            const filteredPlanets = planets.filter(planet => {
+                const matchesFilter = currentFilter === 'all' || planet.type === currentFilter;
+                const matchesSearch = planet.name.toLowerCase().includes(currentSearch.toLowerCase()) || 
+                                     planet.description.toLowerCase().includes(currentSearch.toLowerCase());
+                return matchesFilter && matchesSearch;
+            });
+            
+            if (filteredPlanets.length === 0) {
+                planetsGrid.innerHTML = '<div class="loading" style="text-align:center; padding:40px; color:#a0a0e0;">Tidak ada planet yang sesuai dengan pencarian Anda.</div>';
+                return;
+            }
+            
+            planetsGrid.innerHTML = filteredPlanets.map(planet => `
+                <div class="planet-card" data-planet-id="${planet.id}">
+                    <button class="favorite-btn ${favorites.includes(planet.id) ? 'active' : ''}" data-planet-id="${planet.id}">
+                        <i class="fas fa-star"></i>
+                    </button>
+                    <div class="planet-shape" style="background: ${planet.color}">
+                        <div class="planet-texture" style="background: ${planet.texture}"></div>
+                        <i class="${planet.icon} planet-icon"></i>
+                    </div>
+                    <h3 class="planet-name">${planet.name}</h3>
+                    <p class="planet-desc">${planet.description}</p>
+                    
+                    <div class="planet-stats">
+                        <div class="stat">
+                            <div class="stat-value">${planet.diameter}</div>
+                            <div class="stat-label">Diameter (km)</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${planet.moons}</div>
+                            <div class="stat-label">Bulan</div>
+                        </div>
+                    </div>
+                    
+                    <button class="toggle-details">
+                        <i class="fas fa-chevron-down"></i> Detail
+                    </button>
+                    
+                    <div class="planet-details">
+                        <p><strong>Jarak dari Matahari:</strong> ${planet.distance}</p>
+                        <p><strong>Periode Orbit:</strong> ${planet.orbitalPeriod}</p>
+                        <p><strong>Periode Rotasi:</strong> ${planet.rotationPeriod}</p>
+                        <p><strong>Suhu Rata-rata:</strong> ${planet.temperature}</p>
+                    </div>
+                    
+                    <div class="planet-facts">
+                        <p>${planet.facts}</p>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Tambahkan event listeners untuk card planet
+            document.querySelectorAll('.planet-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('favorite-btn') && 
+                        !e.target.classList.contains('toggle-details') &&
+                        !e.target.closest('.toggle-details')) {
+                        const planetId = parseInt(this.getAttribute('data-planet-id'));
+                        openPlanetModal(planetId);
+                    }
+                });
+            });
+            
+            // Event listeners untuk tombol favorit
+            document.querySelectorAll('.favorite-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const planetId = parseInt(this.getAttribute('data-planet-id'));
+                    toggleFavorite(planetId);
+                });
+            });
+            
+            // Event listeners untuk toggle detail
+            document.querySelectorAll('.toggle-details').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const card = this.closest('.planet-card');
+                    card.classList.toggle('active');
+                    
+                    const icon = this.querySelector('i');
+                    if (card.classList.contains('active')) {
+                        icon.className = 'fas fa-chevron-up';
+                        this.innerHTML = '<i class="fas fa-chevron-up"></i> Sembunyikan';
+                    } else {
+                        icon.className = 'fas fa-chevron-down';
+                        this.innerHTML = '<i class="fas fa-chevron-down"></i> Detail';
+                    }
+                });
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    currentFilter = this.getAttribute('data-filter');
+                    renderPlanets();
+                });
+            });
+            
+            // Search input
+            document.getElementById('searchInput').addEventListener('input', function() {
+                currentSearch = this.value;
+                renderPlanets();
+            });
+            
+            // Show favorites button
+            document.getElementById('showFavorites').addEventListener('click', function() {
+                const favoritesSection = document.getElementById('favoritesSection');
+                favoritesSection.classList.toggle('active');
+                updateFavoritesSection();
+            });
+            
+            // Modal close button
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            
+            // Close modal when clicking outside
+            document.getElementById('planetModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        }
+
+        // Toggle favorit
+        function toggleFavorite(planetId) {
+            const index = favorites.indexOf(planetId);
+            
+            if (index === -1) {
+                favorites.push(planetId);
+                showNotification('Planet telah ditambahkan ke favorit!');
+            } else {
+                favorites.splice(index, 1);
+                showNotification('Planet telah dihapus dari favorit!');
+            }
+            
+            // Simpan ke localStorage
+            localStorage.setItem('planetFavorites', JSON.stringify(favorites));
+            
+            // Perbarui tampilan
+            renderPlanets();
+            updateFavoritesSection();
+        }
+
+        // Update bagian favorit
+        function updateFavoritesSection() {
+            const favoritesList = document.getElementById('favoritesList');
+            const favoritesSection = document.getElementById('favoritesSection');
+            
+            if (favorites.length === 0) {
+                favoritesList.innerHTML = '<p style="text-align:center; width:100%; color:#a0a0e0;">Belum ada planet favorit</p>';
+                return;
+            }
+            
+            const favoritePlanets = planets.filter(planet => favorites.includes(planet.id));
+            
+            favoritesList.innerHTML = favoritePlanets.map(planet => `
+                <div class="favorite-item" data-planet-id="${planet.id}">
+                    <i class="fas fa-star" style="color: #ffd700;"></i>
+                    ${planet.name}
+                </div>
+            `).join('');
+            
+            // Event listener untuk item favorit
+            document.querySelectorAll('.favorite-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const planetId = parseInt(this.getAttribute('data-planet-id'));
+                    openPlanetModal(planetId);
+                });
+            });
+        }
+
+        // Tampilkan notifikasi
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Buka modal detail planet
+        function openPlanetModal(planetId) {
+            const planet = planets.find(p => p.id === planetId);
+            if (!planet) return;
+            
+            document.getElementById('modalPlanetName').textContent = planet.name;
+            
+            const modalImage = document.getElementById('modalPlanetImage');
+            modalImage.style.background = planet.color;
+            modalImage.innerHTML = `
+                <div class="planet-texture" style="background: ${planet.texture}"></div>
+                <i class="${planet.icon} planet-icon"></i>
+            `;
+            
+            const modalDetails = document.getElementById('modalPlanetDetails');
+            modalDetails.innerHTML = `
+                <p><strong>Deskripsi:</strong> ${planet.description}</p>
+                <p><strong>Jenis Planet:</strong> ${getPlanetTypeName(planet.type)}</p>
+                <p><strong>Diameter:</strong> ${planet.diameter} km</p>
+                <p><strong>Massa:</strong> ${planet.mass}</p>
+                <p><strong>Jarak dari Matahari:</strong> ${planet.distance}</p>
+                <p><strong>Periode Orbit:</strong> ${planet.orbitalPeriod}</p>
+                <p><strong>Periode Rotasi:</strong> ${planet.rotationPeriod}</p>
+                <p><strong>Suhu Rata-rata:</strong> ${planet.temperature}</p>
+                <p><strong>Jumlah Bulan:</strong> ${planet.moons}</p>
+                <p><strong>Ditemukan:</strong> ${planet.discovery}</p>
+                <p><strong>Fakta Menarik:</strong> ${planet.facts}</p>
+            `;
+            
+            document.getElementById('planetModal').style.display = 'flex';
+        }
+
+        // Tutup modal
+        function closeModal() {
+            document.getElementById('planetModal').style.display = 'none';
+        }
+
+        // Dapatkan nama jenis planet
+        function getPlanetTypeName(type) {
+            const typeNames = {
+                'rocky': 'Planet Batuan',
+                'gas': 'Planet Gas',
+                'ice': 'Planet Es'
+            };
+            return typeNames[type] || type;
+        }
+
+        // Render chart perbandingan
+        function renderComparisonChart() {
+            const chart = document.getElementById('comparisonChart');
+            const maxDiameter = Math.max(...planets.map(p => p.diameter));
+            
+            chart.innerHTML = planets.map(planet => {
+                const height = (planet.diameter / maxDiameter) * 150;
+                return `
+                    <div class="comparison-bar" style="height: ${height}px">
+                        <div class="comparison-bar-value">${planet.diameter}</div>
+                        <div class="comparison-bar-label">${planet.name}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+</html>
