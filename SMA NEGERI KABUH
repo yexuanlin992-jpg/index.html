@@ -84,6 +84,11 @@
             box-shadow: 0 0 15px rgba(79, 172, 254, 0.5);
         }
         
+        .filter-btn.favorites-active {
+            background: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+        
         .search-box {
             display: flex;
             justify-content: center;
@@ -713,6 +718,7 @@
         let favorites = JSON.parse(localStorage.getItem('planetFavorites')) || [];
         let currentFilter = 'all';
         let currentSearch = '';
+        let isShowingFavorites = false;
 
         // Inisialisasi halaman
         document.addEventListener('DOMContentLoaded', function() {
@@ -726,16 +732,29 @@
         function renderPlanets() {
             const planetsGrid = document.getElementById('planetsGrid');
             
-            // Filter planet berdasarkan jenis dan pencarian
-            const filteredPlanets = planets.filter(planet => {
-                const matchesFilter = currentFilter === 'all' || planet.type === currentFilter;
-                const matchesSearch = planet.name.toLowerCase().includes(currentSearch.toLowerCase()) || 
-                                     planet.description.toLowerCase().includes(currentSearch.toLowerCase());
-                return matchesFilter && matchesSearch;
-            });
+            let filteredPlanets;
+            
+            if (isShowingFavorites) {
+                // Jika sedang menampilkan favorit, filter berdasarkan daftar favorit
+                filteredPlanets = planets.filter(planet => 
+                    favorites.includes(planet.id) && 
+                    (planet.name.toLowerCase().includes(currentSearch.toLowerCase()) || 
+                     planet.description.toLowerCase().includes(currentSearch.toLowerCase()))
+                );
+            } else {
+                // Filter normal berdasarkan jenis dan pencarian
+                filteredPlanets = planets.filter(planet => {
+                    const matchesFilter = currentFilter === 'all' || planet.type === currentFilter;
+                    const matchesSearch = planet.name.toLowerCase().includes(currentSearch.toLowerCase()) || 
+                                         planet.description.toLowerCase().includes(currentSearch.toLowerCase());
+                    return matchesFilter && matchesSearch;
+                });
+            }
             
             if (filteredPlanets.length === 0) {
-                planetsGrid.innerHTML = '<div class="loading" style="text-align:center; padding:40px; color:#a0a0e0;">Tidak ada planet yang sesuai dengan pencarian Anda.</div>';
+                planetsGrid.innerHTML = '<div class="loading" style="text-align:center; padding:40px; color:#a0a0e0;">' + 
+                    (isShowingFavorites ? 'Tidak ada planet favorit yang sesuai dengan pencarian Anda.' : 'Tidak ada planet yang sesuai dengan pencarian Anda.') + 
+                    '</div>';
                 return;
             }
             
@@ -821,9 +840,15 @@
 
         // Setup event listeners
         function setupEventListeners() {
-            // Filter buttons
-            document.querySelectorAll('.filter-btn').forEach(btn => {
+            // Filter buttons (kecuali tombol favorit)
+            document.querySelectorAll('.filter-btn:not(#showFavorites)').forEach(btn => {
                 btn.addEventListener('click', function() {
+                    // Reset state favorit
+                    isShowingFavorites = false;
+                    document.getElementById('favoritesSection').classList.remove('active');
+                    document.getElementById('showFavorites').classList.remove('favorites-active');
+                    
+                    // Update filter aktif
                     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     
@@ -832,17 +857,31 @@
                 });
             });
             
+            // Tombol favorit khusus
+            document.getElementById('showFavorites').addEventListener('click', function() {
+                isShowingFavorites = !isShowingFavorites;
+                
+                if (isShowingFavorites) {
+                    // Tampilkan favorit
+                    document.getElementById('favoritesSection').classList.add('active');
+                    this.classList.add('favorites-active');
+                    document.querySelectorAll('.filter-btn:not(#showFavorites)').forEach(btn => btn.classList.remove('active'));
+                } else {
+                    // Kembali ke semua planet
+                    document.getElementById('favoritesSection').classList.remove('active');
+                    this.classList.remove('favorites-active');
+                    document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+                    currentFilter = 'all';
+                }
+                
+                renderPlanets();
+                updateFavoritesSection();
+            });
+            
             // Search input
             document.getElementById('searchInput').addEventListener('input', function() {
                 currentSearch = this.value;
                 renderPlanets();
-            });
-            
-            // Show favorites button
-            document.getElementById('showFavorites').addEventListener('click', function() {
-                const favoritesSection = document.getElementById('favoritesSection');
-                favoritesSection.classList.toggle('active');
-                updateFavoritesSection();
             });
             
             // Modal close button
@@ -879,7 +918,6 @@
         // Update bagian favorit
         function updateFavoritesSection() {
             const favoritesList = document.getElementById('favoritesList');
-            const favoritesSection = document.getElementById('favoritesSection');
             
             if (favorites.length === 0) {
                 favoritesList.innerHTML = '<p style="text-align:center; width:100%; color:#a0a0e0;">Belum ada planet favorit</p>';
