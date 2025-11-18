@@ -502,19 +502,150 @@
             transform: translateX(0);
         }
 
-        .planet-icon {
-            font-size: 3rem;
-            color: rgba(255, 255, 255, 0.9);
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
-        }
-
-        .planet-texture {
-            position: absolute;
+        /* STYLE PLANET REALISTIS */
+        .realistic-planet {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            opacity: 0.7;
-            mix-blend-mode: overlay;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Merkurius - Abu-abu dengan banyak kawah */
+        .mercury-realistic {
+            background: 
+                radial-gradient(circle at 30% 30%, #8c8c8c, #5a5a5a 60%, #3a3a3a),
+                radial-gradient(circle at 70% 20%, #a8a8a8, transparent 20%),
+                radial-gradient(circle at 20% 70%, #969696, transparent 15%),
+                radial-gradient(circle at 60% 80%, #7a7a7a, transparent 12%);
+            box-shadow: 
+                inset -15px -15px 30px rgba(0,0,0,0.6),
+                inset 10px 10px 20px rgba(255,255,255,0.1);
+        }
+
+        /* Venus - Kuning dengan atmosfer berawan tebal */
+        .venus-realistic {
+            background: 
+                radial-gradient(circle at 40% 40%, #e6b87e, #b5651d 50%, #8b4513),
+                radial-gradient(circle at 60% 30%, rgba(255,255,255,0.3) 10%, transparent 20%),
+                radial-gradient(circle at 30% 60%, rgba(255,255,255,0.2) 15%, transparent 25%),
+                linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 40%, rgba(255,255,255,0.1) 60%, transparent 60%);
+            box-shadow: 
+                inset -12px -12px 25px rgba(0,0,0,0.5),
+                inset 8px 8px 15px rgba(255,255,255,0.1);
+        }
+
+        /* Bumi - Biru dengan lebih banyak daratan hijau dan awan */
+        .earth-realistic {
+            background: 
+                /* Dasar biru lautan */
+                radial-gradient(circle at 30% 40%, #2e5aa7, #1e3f8f 40%, #0f2a5a),
+                /* Benua hijau besar - Amerika Utara & Selatan */
+                radial-gradient(circle at 25% 50%, #228b22 12%, #006400 18%, transparent 22%),
+                /* Benua hijau - Eropa & Asia */
+                radial-gradient(circle at 65% 35%, #32cd32 10%, #228b22 15%, transparent 20%),
+                /* Benua hijau - Afrika */
+                radial-gradient(circle at 45% 65%, #3cb371 8%, #2e8b57 12%, transparent 16%),
+                /* Benua hijau - Australia */
+                radial-gradient(circle at 80% 75%, #90ee90 6%, #7cfc00 10%, transparent 13%),
+                /* Daratan coklat/gunung */
+                radial-gradient(circle at 55% 45%, #daa520 5%, #b8860b 8%, transparent 11%),
+                /* Awan putih */
+                radial-gradient(circle at 70% 55%, rgba(255,255,255,0.9) 4%, rgba(255,255,255,0.6) 7%, transparent 10%),
+                radial-gradient(circle at 35% 30%, rgba(255,255,255,0.8) 3%, rgba(255,255,255,0.4) 6%, transparent 9%),
+                radial-gradient(circle at 50% 70%, rgba(255,255,255,0.7) 5%, rgba(255,255,255,0.3) 8%, transparent 11%);
+            box-shadow: 
+                inset -10px -10px 20px rgba(0,0,0,0.4),
+                inset 6px 6px 12px rgba(255,255,255,0.2);
+        }
+
+        /* Mars - Merah dengan fitur permukaan gelap */
+        .mars-realistic {
+            background: 
+                radial-gradient(circle at 40% 40%, #c1440e, #8b2c0c 50%, #5a1a06),
+                radial-gradient(circle at 70% 30%, #8b0000 15%, transparent 20%),
+                radial-gradient(circle at 30% 70%, #a52a2a 12%, transparent 18%),
+                radial-gradient(circle at 60% 60%, #5a1a06 10%, transparent 15%);
+            box-shadow: 
+                inset -12px -12px 25px rgba(0,0,0,0.5),
+                inset 8px 8px 15px rgba(255,100,100,0.1);
+        }
+
+        /* Jupiter - Strip coklat dengan Bintik Merah Besar */
+        .jupiter-realistic {
+            background: 
+                radial-gradient(circle at 30% 30%, #d8ca9d, #a8996e 40%, #8b7846),
+                linear-gradient(45deg, 
+                    transparent 25%, 
+                    #8b4513 25%, 
+                    #8b4513 35%,
+                    transparent 35%,
+                    transparent 55%,
+                    #a0522d 55%,
+                    #a0522d 65%,
+                    transparent 65%),
+                radial-gradient(circle at 70% 40%, #8b0000 8%, #b22222 12%, transparent 15%);
+            box-shadow: 
+                inset -20px -20px 40px rgba(0,0,0,0.6),
+                inset 15px 15px 25px rgba(255,255,255,0.1);
+        }
+
+        /* Saturnus - Kuning dengan cincin detail */
+        .saturn-realistic {
+            background: radial-gradient(circle at 40% 40%, #e4d19a, #b8a46d 50%, #9c8c5e);
+            box-shadow: 
+                inset -15px -15px 30px rgba(0,0,0,0.5),
+                inset 10px 10px 20px rgba(255,255,255,0.1);
+            position: relative;
+        }
+
+        .saturn-rings-realistic {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(20deg);
+            width: 200%;
+            height: 25%;
+            background: 
+                linear-gradient(90deg, 
+                    transparent 5%,
+                    rgba(210, 180, 140, 0.9) 5%,
+                    rgba(210, 180, 140, 0.9) 15%,
+                    rgba(184, 134, 11, 0.8) 15%,
+                    rgba(184, 134, 11, 0.8) 25%,
+                    rgba(139, 69, 19, 0.7) 25%,
+                    rgba(139, 69, 19, 0.7) 75%,
+                    rgba(184, 134, 11, 0.8) 75%,
+                    rgba(184, 134, 11, 0.8) 85%,
+                    rgba(210, 180, 140, 0.9) 85%,
+                    rgba(210, 180, 140, 0.9) 95%,
+                    transparent 95%);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        /* Uranus - Biru-hijau dengan pola awan */
+        .uranus-realistic {
+            background: 
+                radial-gradient(circle at 30% 30%, #a6d1e6, #7db9d9 40%, #5a9bc2),
+                radial-gradient(circle at 60% 40%, rgba(255,255,255,0.3) 8%, transparent 12%),
+                radial-gradient(circle at 40% 60%, rgba(255,255,255,0.2) 6%, transparent 10%),
+                linear-gradient(30deg, transparent 45%, rgba(255,255,255,0.1) 45%, rgba(255,255,255,0.1) 55%, transparent 55%);
+            box-shadow: 
+                inset -10px -10px 20px rgba(0,0,0,0.4),
+                inset 6px 6px 12px rgba(255,255,255,0.1);
+        }
+
+        /* Neptunus - Biru tua dengan badai besar */
+        .neptune-realistic {
+            background: 
+                radial-gradient(circle at 40% 40%, #5b6dcd, #3a4ca8 50%, #2a3b8c),
+                radial-gradient(circle at 70% 30%, #4169e1 10%, transparent 15%),
+                radial-gradient(circle at 30% 70%, #483d8b 8%, transparent 12%),
+                radial-gradient(circle at 60% 60%, rgba(255,255,255,0.2) 5%, transparent 8%);
+            box-shadow: 
+                inset -12px -12px 25px rgba(0,0,0,0.5),
+                inset 8px 8px 15px rgba(255,255,255,0.1);
         }
 
         .game-section {
@@ -609,7 +740,7 @@
             transform: translateX(-50%);
             width: 80px;
             height: 80px;
-            background: radial-gradient(circle, #ffd700, #ff8c00);
+            background: radial-gradient(circle, #ffd700, #ff8c00, #ff4500);
             border-radius: 50%;
             box-shadow: 0 0 60px #ff8c00;
             z-index: 1;
@@ -689,7 +820,6 @@
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
         }
 
-        /* PERBAIKAN: Layout planet selection yang rapi */
         .planet-selection {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
@@ -739,7 +869,6 @@
             transform: scale(0.9);
         }
 
-        /* PERBAIKAN: Label planet yang tidak tumpang tindih */
         .planet-name-tag {
             font-size: 0.75rem;
             color: #fff;
@@ -965,7 +1094,7 @@
         </div>
         
         <div class="footer">
-            <p>Informasi Planet Tata Surya Interaktif &copy; 2023 - Semua data berdasarkan pengetahuan astronomi terkini</p>
+            <p>Informasi Planet Tata Surya Interaktif &copy; 2025 - Semua data berdasarkan pengetahuan astronomi terkini</p>
             <p>oleh Karina & Intan dari SMA NEGERI KABUH 2025</p>
         </div>
     </div>
@@ -998,9 +1127,7 @@
                 diameter: 4879,
                 mass: "3,3 × 10²³ kg",
                 distance: "57,9 juta km",
-                color: "linear-gradient(135deg, #8c8c8c, #5a5a5a)",
-                icon: "fas fa-fire",
-                texture: "radial-gradient(circle at 30% 30%, #a8a8a8, #696969 70%)",
+                class: "mercury-realistic",
                 facts: "Merkurius tidak memiliki satelit alami dan atmosfer yang signifikan. Satu hari di Merkurius (dari matahari terbit hingga terbit berikutnya) memakan waktu sekitar 176 hari Bumi.",
                 orbitalPeriod: "88 hari",
                 rotationPeriod: "59 hari",
@@ -1017,9 +1144,7 @@
                 diameter: 12104,
                 mass: "4,87 × 10²⁴ kg",
                 distance: "108,2 juta km",
-                color: "linear-gradient(135deg, #e6b87e, #b5651d)",
-                icon: "fas fa-cloud",
-                texture: "radial-gradient(circle at 40% 40%, #f0c090, #d2691e 70%)",
+                class: "venus-realistic",
                 facts: "Venus berotasi dari timur ke barat, berlawanan dengan sebagian besar planet. Atmosfernya yang tebal terdiri terutama dari karbon dioksida, menciptakan efek rumah kaca yang ekstrem.",
                 orbitalPeriod: "225 hari",
                 rotationPeriod: "243 hari",
@@ -1036,9 +1161,7 @@
                 diameter: 12742,
                 mass: "5,97 × 10²⁴ kg",
                 distance: "149,6 juta km",
-                color: "linear-gradient(135deg, #6b93d6, #2e5aa7)",
-                icon: "fas fa-globe-americas",
-                texture: "radial-gradient(circle at 30% 30%, #87ceeb, #2e5aa7 60%, #228b22 80%)",
+                class: "earth-realistic",
                 facts: "Bumi adalah satu-satunya planet yang diketahui memiliki kehidupan. 71% permukaannya ditutupi air, dan memiliki satu satelit alami, Bulan.",
                 orbitalPeriod: "365,25 hari",
                 rotationPeriod: "24 jam",
@@ -1055,9 +1178,7 @@
                 diameter: 6779,
                 mass: "6,42 × 10²³ kg",
                 distance: "227,9 juta km",
-                color: "linear-gradient(135deg, #c1440e, #8b2c0c)",
-                icon: "fas fa-mountain",
-                texture: "radial-gradient(circle at 40% 40%, #ff4500, #8b0000 70%)",
+                class: "mars-realistic",
                 facts: "Mars memiliki gunung tertinggi di tata surya, Olympus Mons, dengan tinggi sekitar 21 km. Planet ini juga memiliki dua satelit alami, Phobos dan Deimos.",
                 orbitalPeriod: "687 hari",
                 rotationPeriod: "24,6 jam",
@@ -1074,9 +1195,7 @@
                 diameter: 139820,
                 mass: "1,90 × 10²⁷ kg",
                 distance: "778,5 juta km",
-                color: "linear-gradient(135deg, #d8ca9d, #a8996e)",
-                icon: "fas fa-circle",
-                texture: "radial-gradient(circle at 30% 30%, #f0e68c, #daa520 50%, #8b4513 80%)",
+                class: "jupiter-realistic",
                 facts: "Jupiter adalah planet terbesar di tata surya kita. Bintik Merah Besarnya adalah badai raksasa yang telah berlangsung setidaknya 400 tahun. Jupiter memiliki 79 satelit yang diketahui.",
                 orbitalPeriod: "12 tahun",
                 rotationPeriod: "9,9 jam",
@@ -1093,9 +1212,7 @@
                 diameter: 116460,
                 mass: "5,68 × 10²⁶ kg",
                 distance: "1,43 miliar km",
-                color: "linear-gradient(135deg, #e4d19a, #b8a46d)",
-                icon: "fas fa-ring",
-                texture: "radial-gradient(circle at 40% 40%, #f0e68c, #daa520 60%)",
+                class: "saturn-realistic",
                 facts: "Cincin Saturnus sebagian besar terbuat dari potongan es dan batu. Planet ini adalah yang paling tidak padat di tata surya - akan mengapung jika ditempatkan di air yang cukup besar.",
                 orbitalPeriod: "29 tahun",
                 rotationPeriod: "10,7 jam",
@@ -1112,9 +1229,7 @@
                 diameter: 50724,
                 mass: "8,68 × 10²⁵ kg",
                 distance: "2,87 miliar km",
-                color: "linear-gradient(135deg, #a6d1e6, #7db9d9)",
-                icon: "fas fa-snowflake",
-                texture: "radial-gradient(circle at 30% 30%, #e0ffff, #87ceeb 60%, #4682b4 80%)",
+                class: "uranus-realistic",
                 facts: "Uranus memiliki sumbu rotasi yang sangat miring, sehingga tampak 'berbaring' saat mengorbit Matahari. Planet ini ditemukan pada tahun 1781 oleh William Herschel.",
                 orbitalPeriod: "84 tahun",
                 rotationPeriod: "17,2 jam",
@@ -1131,9 +1246,7 @@
                 diameter: 49244,
                 mass: "1,02 × 10²⁶ kg",
                 distance: "4,5 miliar km",
-                color: "linear-gradient(135deg, #5b6dcd, #3a4ca8)",
-                icon: "fas fa-wind",
-                texture: "radial-gradient(circle at 40% 40%, #4169e1, #000080 70%)",
+                class: "neptune-realistic",
                 facts: "Neptunus memiliki angin terkuat di tata surya, dengan kecepatan mencapai 2.100 km/jam. Planet ini ditemukan melalui perhitungan matematika sebelum diamati secara langsung.",
                 orbitalPeriod: "165 tahun",
                 rotationPeriod: "16,1 jam",
@@ -1217,9 +1330,9 @@
                     <button class="favorite-btn ${favorites.includes(planet.id) ? 'active' : ''}" data-planet-id="${planet.id}">
                         <i class="fas fa-star"></i>
                     </button>
-                    <div class="planet-shape" style="background: ${planet.color}">
-                        <div class="planet-texture" style="background: ${planet.texture}"></div>
-                        <i class="${planet.icon} planet-icon"></i>
+                    <div class="planet-shape">
+                        <div class="realistic-planet ${planet.class}"></div>
+                        ${planet.name === 'Saturnus' ? '<div class="saturn-rings-realistic"></div>' : ''}
                     </div>
                     <h3 class="planet-name">${planet.name}</h3>
                     <p class="planet-desc">${planet.description}</p>
@@ -1474,10 +1587,10 @@
                 const selectablePlanet = document.createElement('div');
                 selectablePlanet.className = 'selectable-planet';
                 selectablePlanet.setAttribute('data-planet-id', planet.id);
-                selectablePlanet.style.background = planet.color;
                 
                 selectablePlanet.innerHTML = `
-                    <i class="${planet.icon}" style="color: rgba(255, 255, 255, 0.9); font-size: 1.8rem;"></i>
+                    <div class="realistic-planet ${planet.class}"></div>
+                    ${planet.name === 'Saturnus' ? '<div class="saturn-rings-realistic"></div>' : ''}
                 `;
                 
                 // Buat label nama planet terpisah
@@ -1518,8 +1631,9 @@
                 // Posisi benar - beri poin
                 slotElement.classList.add('correct');
                 slotElement.innerHTML = `
-                    <div style="width: 45px; height: 45px; border-radius: 50%; background: ${planet.color}; display: flex; align-items: center; justify-content: center;">
-                        <i class="${planet.icon}" style="color: rgba(255, 255, 255, 0.9); font-size: 1.4rem;"></i>
+                    <div style="width: 45px; height: 45px; border-radius: 50%; position: relative; overflow: hidden;">
+                        <div class="realistic-planet ${planet.class}"></div>
+                        ${planet.name === 'Saturnus' ? '<div class="saturn-rings-realistic"></div>' : ''}
                     </div>
                 `;
                 
@@ -1688,10 +1802,9 @@
             document.getElementById('modalPlanetName').textContent = planet.name;
             
             const modalImage = document.getElementById('modalPlanetImage');
-            modalImage.style.background = planet.color;
             modalImage.innerHTML = `
-                <div class="planet-texture" style="background: ${planet.texture}"></div>
-                <i class="${planet.icon} planet-icon"></i>
+                <div class="realistic-planet ${planet.class}" style="width: 100%; height: 100%;"></div>
+                ${planet.name === 'Saturnus' ? '<div class="saturn-rings-realistic"></div>' : ''}
             `;
             
             const modalDetails = document.getElementById('modalPlanetDetails');
