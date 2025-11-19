@@ -1093,10 +1093,7 @@
             </div>
         </div>
         
-        <div class="footer">
-            <p>Informasi Planet Tata Surya Interaktif &copy; 2025 - Semua data berdasarkan pengetahuan astronomi terkini</p>
-            <p>oleh Karina & Intan dari SMA NEGERI KABUH 2025</p>
-        </div>
+        <!-- Footer sudah dihapus -->
     </div>
     
     <!-- Modal untuk detail planet -->
